@@ -13,7 +13,6 @@ const { NotImplementedError } = require('../extensions/index.js');
  */
 
 const NOARGUMENT = "Unable to determine the time of year!";
-const INVALIDDATE = 'Invalid date!';
 
 const SEASONS = { [11]:"winter",[0]:"winter",[1]:"winter", [2]:"spring",[3]:"spring",[4]:"spring",
   [5]:"summer",[6]:"summer",[7]:"summer",[8]:"autumn",[9]:"autumn",[10]:"autumn"};
@@ -23,17 +22,24 @@ function getSeason(date ) {
 
 
   if (arguments.length<1) return NOARGUMENT;
+  // if (!date) { throw new Error ('Invalid date!');}
+  // if (typeof date !== 'object' )  { throw new Error ('Invalid date!');}
 
+  // if (isNaN(Date.parse(date)) )  { throw new Error ('Invalid date!');}
+  // if ( !(typeof date.getMonth === 'function') )   { throw new Error('Invalid date!');}
+  // if ( date.constructor !== Date )   { throw new Error('Invalid date!');}
 
-  if (typeof date !== 'object' ) { return new Error( INVALIDDATE);}
-  if ( date == null ) { return new Error( INVALIDDATE);}
-  if (!date && isNaN(date.getTime()) ) { return new Error( INVALIDDATE);}
-
+  // if ( !(Object.prototype.toString.call(date) === '[object Date]') && isNaN(date)  ) { throw new Error ('Invalid date!');}
+  try {
+    date.toISOString();
+  } catch (e) {
+    throw new Error('Invalid date!');
+  }
 
   return SEASONS[date.getMonth()];
 }
 
-console.log(getSeason(new Date(2022, 1, 29)));
+
 
 module.exports = {
   getSeason
